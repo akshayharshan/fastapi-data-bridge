@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  receiver:
+    build: ./fastapi-servers/receiver
+    ports:
+      - "8000:8001"       # host port 8000 → container port 8001
+    volumes:
+      - ./data:/data
+
+  sender:
+    build: ./fastapi-servers/sender
+    ports:
+      - "8001:8000"       # host port 8001 → container port 8000
+    depends_on:
+      - receiver
