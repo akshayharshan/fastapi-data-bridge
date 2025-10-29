@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
 import json, atexit
+import uvicorn
 from datetime import datetime
 
 app = FastAPI()
@@ -9,6 +10,7 @@ received_data = []
 async def receive_data(request: Request):
     data = await request.json()
     received_data.append(data)
+    print(received_data)
     return {"status": "received", "count": len(received_data)}
 
 def write_to_file():
@@ -18,3 +20,11 @@ def write_to_file():
     print(f"🧾 Data written to {filename}")
 
 atexit.register(write_to_file)
+
+if __name__ == "__main__":
+    uvicorn.run(
+            "receiver:app",
+            host = "0.0.0.0",
+            port = 7000,
+            reload = True
+    )
